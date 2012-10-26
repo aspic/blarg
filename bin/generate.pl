@@ -8,4 +8,4 @@ use Blarg;
 
 my $blarg = new Blarg;
 
-$blarg->process_file("2012-10-25-test-title-yow.md", "post.tpl");
+$blarg->process_file("index.md", "index.tpl");

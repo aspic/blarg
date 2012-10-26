@@ -38,7 +38,8 @@ sub process_file {
 
 	# Split scalar containing post into array
 	my @lines = split(/\n/, $text);
-	
+
+	# Extract meta data
 	my @meta_data = ();
 	my $meta_started;
 	# TODO: Check valid meta-data
@@ -46,20 +47,27 @@ sub process_file {
 		my $line = shift @lines;
 		if($line =~ m/^---/) {
 			# Check if we are starting or finishing
-			if(!$meta_started) { $meta_started = 1; } 
+			if(!$meta_started) { $meta_started = 1; }
 			else { last; }
 		} elsif($meta_started) {
 			push @meta_data, $line;
 		}
 	}
-	
-	# Join arrays back to refs	
+
+	# Join arrays back to refs
 	my $meta_ref = join("\n", @meta_data);
 	my $content_ref = join("\n", @lines);
 
 	# Extract info from filename
+	my $date_offset = 0;
 	my @date = split(/-/, substr ($file_name, 0, 11));
-	my $name = substr ($file_name, 11, length($file_name) - 11 - 3);
+	if(@date != 3) {
+		@date = (undef, undef, undef);
+	} else {
+		$date_offset = 11;
+	}
+
+	my $name = substr ($file_name, $date_offset, length($file_name) - $date_offset - 3);
 
 	# Build meta ref
 	my $meta = {
@@ -72,7 +80,7 @@ sub process_file {
 
 	# Build reference
 	my $vars= {
-		content => markdown($text),
+		content => markdown($content_ref),
 		meta => $meta
 	};
 
@@ -92,7 +100,7 @@ sub create_file {
 	});
 
 	# Adding some static variables
-	$vars->{title} = "Mehl.no";
+	$vars->{title} = config('SITE_TITLE');
 
 	# Process the data
 	my $content = $template->process($vars->{meta}->{template}, $vars, $output) or die
@@ -104,8 +112,12 @@ sub dir_layout {
 
 	my $root = config('DIR_DEST');
 
-	while (@_) { 
+	while (@_) {
 		my $dir = shift;
+
+		if(!defined($dir)) {
+			last;
+		}
 
 		$root = "$root/$dir";
 		if(-d $root) {
