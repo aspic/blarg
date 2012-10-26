@@ -34,13 +34,34 @@ sub process_file {
 	my ($self, $file_name, $template) = @_;
 
 	my $posts = config('DIR_POSTS');
-	# TODO: Extract metadata from text, before markdown
 	my $text = read_file("$posts/$file_name");
+
+	# Split scalar containing post into array
+	my @lines = split(/\n/, $text);
+	
+	my @meta_data = ();
+	my $meta_started;
+	# TODO: Check valid meta-data
+	for (@lines) {
+		my $line = shift @lines;
+		if($line =~ m/^---/) {
+			# Check if we are starting or finishing
+			if(!$meta_started) { $meta_started = 1; } 
+			else { last; }
+		} elsif($meta_started) {
+			push @meta_data, $line;
+		}
+	}
+	
+	# Join arrays back to refs	
+	my $meta_ref = join("\n", @meta_data);
+	my $content_ref = join("\n", @lines);
 
 	# Extract info from filename
 	my @date = split(/-/, substr ($file_name, 0, 11));
 	my $name = substr ($file_name, 11, length($file_name) - 11 - 3);
 
+	# Build meta ref
 	my $meta = {
 		title => $name,
 		year => $date[0],
@@ -50,7 +71,6 @@ sub process_file {
 	};
 
 	# Build reference
-
 	my $vars= {
 		content => markdown($text),
 		meta => $meta
@@ -61,7 +81,6 @@ sub process_file {
 
 sub create_file {
 	my ($self, $vars) = @_;
-
 
 	my $meta = $vars->{meta};
 	my $path = $self->dir_layout($meta->{year}, $meta->{month}, $meta->{day});
@@ -97,7 +116,6 @@ sub dir_layout {
 		}
 
 	}
-
 	return $root;
 }
 
