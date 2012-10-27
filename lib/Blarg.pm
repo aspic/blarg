@@ -106,6 +106,7 @@ sub inject_actions {
 	return $post;
 }
 
+# Sequentially processes the raw markdown-file.
 sub process_file {
 	my ($self, $file_name) = @_;
 
@@ -144,6 +145,11 @@ sub create_file {
 
 	# Do markdown
 	$post->{content} = markdown($post->{content});
+
+	# Check whether variables have been overridden
+	unless(defined($meta->{title})) {
+		$meta->{title} = config('TITLE');
+	}
 
 	my $template = Template->new({
 		INCLUDE_PATH => [config('DIR_TPL')],
@@ -188,7 +194,7 @@ sub use_command {
 	if($cmd->{cmd} eq 'posts') {
 		push @result, "## Posts:";
 		for my $post ( @{ get_posts() }) {
-			push @result, "[$post->{name}]($post->{path})";
+			push @result, "-    [$post->{name}]($post->{path})\n";
 		}
 	} elsif($cmd->{cmd} eq 'git') {
 		push @result, "### Git log for this post:";
@@ -204,7 +210,7 @@ sub use_command {
 
 }
 
-# Return
+# Ghetto method for returning all posts.
 sub get_posts {
 	my $limit = shift;
 
@@ -222,6 +228,7 @@ sub get_posts {
 	return \@posts;
 }
 
+# Returns the git log for the specified file
 sub git_log {
 	my ($file, $limit, $style) = @_;
 
