@@ -1,0 +1,21 @@
+body {
+	width: 750px;
+  margin-right: auto;
+  background: #D8D8D8;
+}
+
+div.content {
+	-moz-border-radius: 15px;
+	border-radius: 15px;
+  background: #FFFFFF;
+  padding: 15px;
+}
+
+div.post {
+	-moz-border-radius: 8px;
+	border-radius: 8px;
+  background: green;
+  padding: 8px;
+}
+
+
