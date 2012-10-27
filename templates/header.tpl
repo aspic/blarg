@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
  <head>
-  <title>[% title %]</title>
+  <title>[% meta.title %]</title>
+  <link rel="stylesheet" type="text/css" href="/blarg/css/style.css">
  </head>
