@@ -1,11 +1,5 @@
-<!DOCTYPE html>
-<html>
- <head>
-  <title>[% title %]</title>
- </head>
-
+[% header %] 
  <body>
  [% content %]
  </body>
-
-</html>
+[% footer %]
