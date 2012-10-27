@@ -228,8 +228,9 @@ sub git_log {
 	if(!defined($limit)) {
 		$limit = 1;
 	}
-
-	my $style = "    ";
+	if(!defined($style)) {
+		$style = "    ";
+	}
 
 	my @result = `git log -$limit --pretty=format:'%h - %s (%ci)' --abbrev-commit $file`;
 	for my $item (@result) {
