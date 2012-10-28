@@ -21,8 +21,9 @@ if(@ARGV == 0) {
 
 	while (my $file = readdir(DIR)) {
 		next if ($file =~ m/^\./);
-		print Dumper($file);
 		$blarg->create_file($file);
+
+		print "Rebuilt: $file\n";
 	}
 	closedir(DIR);
 
