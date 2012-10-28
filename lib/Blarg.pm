@@ -111,7 +111,6 @@ sub process_file {
 	my ($self, $file_name) = @_;
 
 	my $posts = config('DIR_POSTS');
-
 	my $temp = read_file("$posts/$file_name");
 
 	# Initial structure
@@ -122,6 +121,7 @@ sub process_file {
 
 	# Get meta data
 	$post = $self->strip_meta($post);
+
 	# Inject actions
 	$post = $self->inject_actions($post);
 
@@ -194,22 +194,28 @@ sub use_command {
 	my @result = ();
 	my $type = $cmd->{cmd};
 
-	# Last N posts
+	# List N posts
 	if($type =~ m/posts/) {
-		for my $post ( @{ get_posts() }) {
-			push @result, "-    [$post->{name}]($post->{path})\n";
+		for my $post ( @{ $self->get_posts() }) {
+			my $title = $post->{meta}->{title};
+			# Assign title
+			unless(defined($title)) {
+				$title = $post->{file_name};
+			}
+			# Create list
+			push @result, "-    [$title]($post->{file}->{path})\n";
 		}
-	}
-	# Git log
-	elsif($type =~ m/git/) {
-		my $log = git_log(config('DIR_POSTS')."/".$cmd->{file_name}, $cmd->{limit});
-		push @result, $log;
 	}
 	# Single post
 	elsif($type =~ m/post/) {
-		my $last = get_posts(1)->[0];
-		my $test = $self->process_file($last->{full})->{content};
-		push @result, $test;
+		my $last = $self->get_posts(1)->[0];
+		my $content = $last->{content};
+		push @result, $content;
+	}
+	# Git log
+	elsif($type =~ m/git/) {
+		my $log = git_log($cmd);
+		push @result, $log;
 	}
 
 	my $result = join("\n", @result);
@@ -220,7 +226,7 @@ sub use_command {
 
 # Ghetto method for returning all posts.
 sub get_posts {
-	my $limit = shift;
+	my ($self, $limit) = @_;
 
 	unless(defined($limit)) {
 		$limit = 10;
@@ -232,7 +238,7 @@ sub get_posts {
 	opendir(DIR, config('DIR_POSTS')) or die $!;
 	while (my $file = readdir(DIR)) {
 		if($file =~ m/^[0-9]/) {
-			push @posts, file_path($file);
+			push @posts, $self->process_file($file);
 			$count++;
 			if($count >= $limit) {
 				last;
@@ -246,22 +252,39 @@ sub get_posts {
 
 # Returns the git log for the specified file
 sub git_log {
-	my ($file, $limit, $style) = @_;
+	my ($cmd) = @_;
 
-	if(!defined($limit)) {
+	my $title = $cmd->{title};
+	my $path = $cmd->{path};
+	my $limit = $cmd->{limit};
+	my $style = $cmd->{style};
+
+	unless(defined($limit)) {
 		$limit = 1;
 	}
-	if(!defined($style)) {
+	unless(defined($style)) {
 		$style = "    ";
 	}
 
-	my @result = `git log -$limit --pretty=format:'%h - %s (%ci)' --abbrev-commit $file`;
+	my @result = ();
+	# Paths
+	unless(defined($path)) {
+		# We assume posts
+		$path = config('DIR_POSTS')."/".$cmd->{file_name};
+		@result = `git log -$limit --pretty=format:'%h - %s (%ci)' --abbrev-commit $path`;
+	} else {
+		# Custom directory (for projects etc)
+		my $git_dir = "$path/.git";
+		# Only check root
+		$path = ".";
+		@result = `git --git-dir=$git_dir log -$limit --pretty=format:'%h - %s (%ci)' --abbrev-commit $path`;
+	}
+
 	for my $item (@result) {
 		$item = $style.$item;
 	}
 
 	return join("", @result);
-
 }
 
 # Convenient (but ugly) routine for getting path info
