@@ -1,7 +1,5 @@
 [% INCLUDE header.tpl %] 
- <body>
-  <div class="content">
-   [% content %]
-  </div>
- </body>
+ <div class="content">
+  [% content %]
+ </div>
 [% INCLUDE footer.tpl %]
