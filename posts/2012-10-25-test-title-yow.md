@@ -1,7 +1,7 @@
 ---
 template: post.tpl
 project: blarg.html
-title: Hello world!
+title: Hello Blarg!
 ---
 ## A post about Blarg
 
@@ -19,9 +19,16 @@ why are people still using PHP?!
 
 (it has some other dependencies as well).
 
+### How?
+The engine is basically just a small library for dissecting
+fixed-format text files (gathering meta data, action hooks etc.). At
+last the content gets run through the markdown-parser, and stored to
+disk. What you are reading now, is the result of this process.
+
 ### Why?
-I figured I already have too little time to do my own projects, so it
-would not really matter. Also, because Perl is fun!
+Pushing another element onto this stack of _things I want to spend time
+on_ just seemed appropriate. I've also wanted a minimalistic hobby site
+for some time, where I can write about hobby projects, and other stuff.
 
 ### Latest Blarg commits
 {% git limit=3 path=/home/aspic/dev/blarg %}
