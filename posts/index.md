@@ -2,7 +2,7 @@
 template: index.tpl
 title: Mehl.no
 ---
-# Welcome to this Blarg
+## Welcome to this Blarg
 
 Someone actually visited!
 
