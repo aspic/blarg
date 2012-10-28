@@ -125,15 +125,17 @@ sub process_file {
 	# Inject actions
 	$post = $self->inject_actions($post);
 
-	# Render file
-	$self->create_file($post);
+	return $post;
 }
+
 
 #
 # When reaching this point, file should be properly structured.
 #
 sub create_file {
-	my ($self, $post) = @_;
+	my ($self, $file_name) = @_;
+
+	my $post = $self->process_file($file_name);
 
 	my $meta = $post->{meta};
 	my $file = $post->{file};
@@ -190,18 +192,24 @@ sub use_command {
 	my ($self, $cmd) = @_;
 
 	my @result = ();
+	my $type = $cmd->{cmd};
 
-	if($cmd->{cmd} eq 'posts') {
-		push @result, "## Posts:";
+	# Last N posts
+	if($type =~ m/posts/) {
 		for my $post ( @{ get_posts() }) {
 			push @result, "-    [$post->{name}]($post->{path})\n";
 		}
-	} elsif($cmd->{cmd} eq 'git') {
-		push @result, "### Git log for this post:";
-
+	}
+	# Git log
+	elsif($type =~ m/git/) {
 		my $log = git_log(config('DIR_POSTS')."/".$cmd->{file_name}, $cmd->{limit});
 		push @result, $log;
-
+	}
+	# Single post
+	elsif($type =~ m/post/) {
+		my $last = get_posts(1)->[0];
+		my $test = $self->process_file($last->{full})->{content};
+		push @result, $test;
 	}
 
 	my $result = join("\n", @result);
@@ -214,13 +222,21 @@ sub use_command {
 sub get_posts {
 	my $limit = shift;
 
+	unless(defined($limit)) {
+		$limit = 10;
+	}
 	my @posts = ();
 
-	opendir(DIR, config('DIR_POSTS')) or die $!;
+	my $count = 0;
 
+	opendir(DIR, config('DIR_POSTS')) or die $!;
 	while (my $file = readdir(DIR)) {
 		if($file =~ m/^[0-9]/) {
 			push @posts, file_path($file);
+			$count++;
+			if($count >= $limit) {
+				last;
+			}
 		}
 	}
 	closedir(DIR);
@@ -263,6 +279,7 @@ sub file_path {
 
 	# Assign meta
 	my $meta = {
+		full => $file_name,
 		name => $name,
 		year => $date[0],
 		month => $date[1],

@@ -22,7 +22,7 @@ if(@ARGV == 0) {
 	while (my $file = readdir(DIR)) {
 		next if ($file =~ m/^\./);
 		print Dumper($file);
-		$blarg->process_file($file);
+		$blarg->create_file($file);
 	}
 	closedir(DIR);
 
@@ -32,7 +32,7 @@ if(@ARGV == 0) {
 elsif(@ARGV == 1) {
 	my $post = $ARGV[0];
 
-	$blarg->process_file($post);
+	$blarg->create_file($post);
 	print "$post got deployed.\n";
 }
 
