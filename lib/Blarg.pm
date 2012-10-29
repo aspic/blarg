@@ -60,9 +60,12 @@ sub strip_meta {
 	# Remove meta block
 	my $length = scalar(@lines);
 	@lines = @lines[$count..$length-1];
-	$post->{content} = join("\n", @lines);
 
+	# Set content
+	$post->{content} = join("\n", @lines);
+	# Append file meta data
 	$post->{file} = file_path($post->{file_name});
+	# Append meta data
 	$post->{meta} = $meta;
 
 	return $post;
@@ -94,7 +97,7 @@ sub inject_actions {
 				$options->{$key} = $val;
 			}
 			# Add result
-			push @content, $self->use_command($options);
+			push @content, $self->use_command($options, $post);
 		} else {
 			push @content, $line;
 		}
@@ -189,7 +192,7 @@ sub dir_layout {
 
 # We expect a hash, and should return text
 sub use_command {
-	my ($self, $cmd) = @_;
+	my ($self, $cmd, $post) = @_;
 
 	my @result = ();
 	my $type = $cmd->{cmd};
@@ -216,6 +219,11 @@ sub use_command {
 	elsif($type =~ m/git/) {
 		my $log = git_log($cmd);
 		push @result, $log;
+	}
+	# Date
+	elsif($type =~ m/date/) {
+		my $file = $post->{file};
+		push @result, "    $file->{year}-$file->{month}-$file->{day}";
 	}
 
 	my $result = join("\n", @result);
@@ -291,6 +299,7 @@ sub git_log {
 sub file_path {
 	my $file_name = shift;
 
+	# TODO: Do different.
 	my $date_offset = 0;
 	my @date = split(/-/, substr ($file_name, 0, 11));
 	if(@date != 3) {
