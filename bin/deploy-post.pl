@@ -13,7 +13,6 @@ unless (@ARGV == 0 || @ARGV == 1) {
 }
 
 my $blarg = new Blarg;
-use Data::Dumper;
 
 # Rebuild tree
 if(@ARGV == 0) {
