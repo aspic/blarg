@@ -3,8 +3,6 @@ template: post.tpl
 title: Test all the markdown!
 ---
 
-{% title %}
-
 # I
 ## just
 ### needed
@@ -12,4 +10,4 @@ title: Test all the markdown!
 ##### second
 ###### post
 
-{% git limit=1 %}
+[% git limit=1 %]

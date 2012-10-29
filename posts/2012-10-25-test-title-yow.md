@@ -5,7 +5,7 @@ project_title: Blarg
 title: Hello Blarg!
 ---
 ## A post about Blarg
-{% date %}
+[% date %]
 
 I just figured I needed a static site generator (hah!), but when
 looking for suitable software, they were all written in the wrong
@@ -33,4 +33,4 @@ on_ just seemed appropriate. I've also wanted a minimalistic hobby site
 for some time, where I can write about hobby projects, and other stuff.
 
 ### Latest Blarg commits
-{% git limit=3 path=/home/aspic/dev/blarg %}
+[% git limit=3 path=/home/aspic/dev/blarg %]
