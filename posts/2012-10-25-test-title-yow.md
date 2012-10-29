@@ -1,9 +1,11 @@
 ---
 template: post.tpl
-project: blarg.html
+project_url: blarg.html
+project_title: Blarg
 title: Hello Blarg!
 ---
 ## A post about Blarg
+{% date %}
 
 I just figured I needed a static site generator (hah!), but when
 looking for suitable software, they were all written in the wrong
