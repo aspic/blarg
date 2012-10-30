@@ -28,11 +28,14 @@ sub inject_anchors {
 
 	for my $line (@lines) {
 
-		if($line =~ s/(.*\[% )(.*)( %\].*)/$1$3/) {
+		if($line =~ s/(.*)(\[%.*%\])(.*)/$1$3/) {
 			# Custom hooks directly into md-file
+			my $left= $1;
 			my $anchor = $2;
+			my $right = $3;
 
 			# Extract options
+			$anchor =~ s/(\[% | %\])//g;
 			my @cmd_options = split(/ /, $anchor);
 
 			my $command = shift @cmd_options;
@@ -47,7 +50,7 @@ sub inject_anchors {
 				$options->{$key} = $val;
 			}
 			# Add result
-			push @content, use_anchor($options, $post);
+			push @content, $left.use_anchor($options, $post).$right;
 		} else {
 			# Nothing to see here, move along
 			push @content, $line;
@@ -80,7 +83,7 @@ sub use_anchor {
 	}
 	# Single post
 	elsif($type =~ m/post/) {
-		my $last = $self->get_posts(1)->[0];
+		my $last = Blarg::get_posts(1)->[0];
 		my $content = $last->{content};
 		push @result, $content;
 	}
