@@ -58,7 +58,14 @@ sub strip_meta {
 			next;
 		} elsif($meta_started) {
 			my ($key, $value)= split(/: /, $line);
-			$meta->{$key} = $value;
+
+			# Array
+			if($value =~ m/,/) {
+				my @values = split(/,/, $value);
+				$meta->{$key} = \@values;
+			} else {
+				$meta->{$key} = $value;
+			}
 			$count++;
 		}
 	}
