@@ -7,6 +7,7 @@
  </head>
  <body>
   <div class="site">
+   <h1 style="display: inline;">mehl.no</h1>
    <nav>
     <ul>
      <li><a href="/blarg/index.html">Home</a></li>
