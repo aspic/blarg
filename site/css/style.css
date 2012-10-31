@@ -4,8 +4,8 @@ body {
   background: #D8D8D8;
 }
 
-h2 {
-	margin-bottom: 0px;
+h1 {
+text-shadow: 3px 3px #D8D8D8;
 }
 
 nav {
@@ -41,8 +41,6 @@ div.content {
 }
 
 div.post {
-	-moz-border-radius: 8px;
-	border-radius: 8px;
 }
 
 div.meta {
