@@ -89,8 +89,6 @@ sub strip_meta {
 	return $post;
 }
 
-
-
 # Sequentially processes the raw markdown-file.
 # This routine can be triggered several times during one generation
 sub process_post {

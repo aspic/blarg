@@ -24,7 +24,6 @@ sub store_tags {
 
 	my $post_link = $post->{file}->{path};
 	my $post_title = $post->{meta}->{title};
-	
 
 	for my $tag( @{ $post->{meta}->{tags} }) {
 		if(!defined($tags->{$tag})) {
