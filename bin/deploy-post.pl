@@ -21,10 +21,11 @@ if(@ARGV == 0) {
 	while (my $file = readdir(DIR)) {
 		next if ($file =~ m/^\./);
 		$blarg->create_file($file);
-
-		print "Rebuilt: $file\n";
+		print "$file got recreated.\n";
 	}
 	closedir(DIR);
+
+	$blarg->tag_handle()->write_tags();
 
 	print "Site got rebuilt.\n";
 }

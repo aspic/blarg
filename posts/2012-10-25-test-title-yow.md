@@ -3,6 +3,7 @@ template: post.tpl
 project_url: blarg.html
 project_title: Blarg
 title: Hello Blarg!
+tags: blarg,hello,asdf
 ---
 ## A post about Blarg
 [% date %]

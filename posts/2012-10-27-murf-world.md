@@ -1,13 +1,14 @@
 ---
 template: post.tpl
 title: Test all the markdown!
+tags: lolo,asdf
 ---
 
-# I
+# I [% date %]
 ## just
 ### needed
 #### a
-##### second
+##### second [% git %]
 ###### post
 
 [% git limit=1 %]
