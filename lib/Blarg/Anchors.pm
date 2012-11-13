@@ -81,17 +81,19 @@ sub use_anchor {
 		}
 	}
 
-	# Single post
-	elsif($type =~ m/post/) {
+	# Last post
+	elsif($type =~ m/last/) {
 		my $last = Blarg::get_posts(1)->[0];
 		my $content = $last->{content};
 		push @result, $content;
 	}
+
 	# Git log
 	elsif($type =~ m/git/) {
 		my $log = git_log($cmd);
 		push @result, $log;
 	}
+
 	# Date
 	elsif($type =~ m/date/) {
 		my $file = $post->{file};
