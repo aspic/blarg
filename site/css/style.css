@@ -5,7 +5,11 @@ body {
 }
 
 h1 {
-text-shadow: 3px 3px #D8D8D8;
+	text-shadow: 3px 3px #D8D8D8;
+}
+h1, h2 {
+	margin: 0px;
+	padding: 0px;
 }
 
 nav {
