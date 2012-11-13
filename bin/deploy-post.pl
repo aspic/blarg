@@ -5,6 +5,7 @@ use warnings;
 
 use lib 'lib/';
 use Blarg;
+use Data::Dumper;
 
 
 unless (@ARGV == 0 || @ARGV == 1) {
@@ -20,12 +21,16 @@ if(@ARGV == 0) {
 
 	while (my $file = readdir(DIR)) {
 		next if ($file =~ m/^\./);
-		$blarg->create_file($file);
+		$blarg->process_file($file);
 		print "$file got recreated.\n";
 	}
 	closedir(DIR);
 
-	$blarg->tag_handle()->write_tags();
+
+	# Create tags
+	my $tag_post = Blarg::process_post("tags.md");
+	$tag_post = Blarg::Tags::set_content($tag_post);
+	$blarg->create_file($tag_post);
 
 	print "Site got rebuilt.\n";
 }

@@ -93,7 +93,7 @@ sub strip_meta {
 
 # Sequentially processes the raw markdown-file.
 # This routine can be triggered several times during one generation
-sub process_file {
+sub process_post {
 	my ($file_name) = @_;
 
 	my $posts = config('DIR_POSTS');
@@ -109,17 +109,19 @@ sub process_file {
 	$post = strip_meta($post);
 	# Inject actions
 	$post = $anchors->inject_anchors($self, $post);
+	# Store tags
+	$post = $tags->store_tags($post);
 
 	return $post;
 }
 
 #
-# When reaching this point, file should be properly structured.
+# This routine will write the processed post to file.
 #
 sub create_file {
-	my ($self, $file_name) = @_;
+	my ($self, $post) = @_;
 
-	my $post = process_file($file_name);
+	my $file_name = $post->{file};
 
 	# TODO: Throw some sort of error
 	if(!defined($post->{meta}->{template})) {
@@ -150,6 +152,17 @@ sub create_file {
 	# Process the data
 	my $content = $template->process($meta->{template}, $post, $output) or die
 	"Template rendering failed", $template->error(), "\n";
+}
+
+#
+# This routine will process a post and write it to file
+#
+sub process_file {
+	my($self, $file_name) = @_;
+
+	my $post = process_post($file_name);
+
+	$self->create_file($post);
 }
 
 # Routine for creating directory structure
@@ -198,7 +211,7 @@ sub get_posts {
 	opendir(DIR, config('DIR_POSTS')) or die $!;
 	while (my $file = readdir(DIR)) {
 		if($file =~ m/^[0-9]/) {
-			push @posts, process_file($file);
+			push @posts, process_post($file);
 			$count++;
 			if($count >= $limit) {
 				last;
