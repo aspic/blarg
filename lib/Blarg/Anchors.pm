@@ -70,7 +70,7 @@ sub use_anchor {
 
 	# List N posts
 	if($type =~ m/posts/) {
-		for my $post ( @{ Blarg::get_posts() }) {
+		for my $post ( @{ Blarg::get_posts($cmd->{limit}) }) {
 			my $title = $post->{meta}->{title};
 			# Assign title
 			unless(defined($title)) {

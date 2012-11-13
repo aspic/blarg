@@ -200,7 +200,9 @@ sub get_posts {
 	my ($limit) = @_;
 
 	unless(defined($limit)) {
-		$limit = 10;
+		$limit = 5;
+	} else {
+		$limit -= $limit;
 	}
 	my @posts = ();
 
@@ -208,15 +210,23 @@ sub get_posts {
 
 	opendir(DIR, config('DIR_POSTS')) or die $!;
 	while (my $file = readdir(DIR)) {
+		# Only retrieve posts starting with numbers
 		if($file =~ m/^[0-9]/) {
 			push @posts, process_post($file);
-			$count++;
+			# Skip to end when limit is reached
 			if($count >= $limit) {
 				last;
 			}
+			$count++;
 		}
 	}
 	closedir(DIR);
+
+	# TODO: More options here.
+	# Sort on date
+	@posts = sort(@posts);
+	# Limit
+	@posts = @posts[0..$limit];
 
 	return \@posts;
 }
