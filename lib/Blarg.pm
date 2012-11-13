@@ -4,6 +4,7 @@ use strict;
 
 package Blarg;
 
+# Use some modules
 use Template;
 use Config::File qw(read_config_file);
 use Text::Markdown 'markdown';
@@ -12,11 +13,15 @@ use File::Slurp;
 
 # Custom modules
 use Blarg::Anchors;
+use Blarg::Tags;
 
-my $config;
-my $anchors = new Blarg::Anchors;
+# References
 my $blarg;
 my $self;
+my $config;
+
+my $anchors = new Blarg::Anchors;
+my $tags = new Blarg::Tags;
 
 sub new {
 	my $class = shift;
@@ -87,6 +92,7 @@ sub strip_meta {
 
 
 # Sequentially processes the raw markdown-file.
+# This routine can be triggered several times during one generation
 sub process_file {
 	my ($file_name) = @_;
 
@@ -101,13 +107,11 @@ sub process_file {
 
 	# Get meta data
 	$post = strip_meta($post);
-
 	# Inject actions
 	$post = $anchors->inject_anchors($self, $post);
 
 	return $post;
 }
-
 
 #
 # When reaching this point, file should be properly structured.
@@ -116,6 +120,12 @@ sub create_file {
 	my ($self, $file_name) = @_;
 
 	my $post = process_file($file_name);
+
+	# TODO: Throw some sort of error
+	if(!defined($post->{meta}->{template})) {
+		print "Error: No template defined in meta tag, will not create file $file_name\n";
+		return;
+	}
 
 	my $meta = $post->{meta};
 	my $file = $post->{file};
@@ -147,6 +157,13 @@ sub dir_layout {
 	my ($self) = shift;
 
 	my $root = config('DIR_DEST');
+
+	# Check that root directory exists, or 
+	unless(-d $root) {
+		unless(mkdir $root) {
+			die "Unable to create $root";
+		}
+	}
 
 	while (@_) {
 		my $dir = shift;
@@ -218,6 +235,11 @@ sub file_path {
 		path => "$date[0]/$date[1]/$date[2]/$name.html",
 	};
 	return $meta;
+}
+
+sub tag_handle {
+	my $self = shift;
+	return $tags;
 }
 
 1;

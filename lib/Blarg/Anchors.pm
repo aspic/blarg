@@ -17,8 +17,7 @@ sub new {
 	return $self;
 }
 
-#
-# Parses and injects anchors into the post
+# Parse and inject anchors into the specified post
 sub inject_anchors {
 	my ($self, $blarg, $post) = @_;
 
@@ -81,6 +80,7 @@ sub use_anchor {
 			push @result, "-    [$title]($post->{file}->{path})\n";
 		}
 	}
+
 	# Single post
 	elsif($type =~ m/post/) {
 		my $last = Blarg::get_posts(1)->[0];
