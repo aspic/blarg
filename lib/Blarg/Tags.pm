@@ -8,7 +8,7 @@ use Data::Dumper;
 
 my $self;
 my $blarg;
-my $tags = {};
+my $tags;
 
 sub new {
 	my ($class, $blarg_ref) = @_;
@@ -38,7 +38,7 @@ sub store_tags {
 # Routine for updating/creating the tag flatpage
 # Right now the file will get entirely recreated.
 sub set_content {
-	my ($post) = @_; 
+	my ($post) = @_;
 	my $tag_file = Blarg::config('DIR_POSTS') ."/".Blarg::config('PAGE_TAGS');
 	if(!defined($tag_file)) {
 		print "Error: no tag file specified, will not create tags.\n";
@@ -48,15 +48,16 @@ sub set_content {
 		return;
 	}
 
+	# TODO: Customized formatting for headers
 	# Start structuring text.
 	my $content = "## Tags\n";
-
 	# Loop over all the tags.
-	for my $tag_key (keys $tags) {
+	for my $tag_key (sort keys $tags) {
 		$content .= "### [$tag_key](#$tag_key)\n";
 		# Array of hashes
 		my $tag = $tags->{$tag_key};
-		# Append the links and their titles	
+		$content .= "#####";
+		# Append the links and their titles
 		for my $title (keys $tag) {
 			$content .= "[$title]($tag->{$title}) ";
 		}
