@@ -97,7 +97,7 @@ sub use_anchor {
 	# Date
 	elsif($type =~ m/date/) {
 		my $file = $post->{file};
-		push @result, "    $file->{year}-$file->{month}-$file->{day}";
+		push @result, "_$file->{year}-$file->{month}-$file->{day}_";
 	}
 
 	my $result = join("\n", @result);
