@@ -142,6 +142,9 @@ sub create_file {
 	unless(defined($meta->{title})) {
 		$meta->{title} = config('TITLE');
 	}
+	if(defined(config('PAGE_TAGS'))) {
+		$meta->{tag} = config('PAGE_TAGS');
+	}
 
 	my $template = Template->new({
 		INCLUDE_PATH => [config('DIR_TPL')],

@@ -12,5 +12,8 @@
     <ul>
      <li><a href="/blarg/index.html">Home</a></li>
      <li><a href="/blarg/about.html">About</a></li>
+     [% IF meta.tag %]
+      <li><a href="/blarg/[% meta.tag %].html">Tags</a></li>
+     [% END %]
     </ul>
    </nav>
