@@ -1,6 +1,6 @@
   <footer>
    <hr>
-   yuuum, ☕
+   ☕ driven development
   </footer>
   </div>
  </body>

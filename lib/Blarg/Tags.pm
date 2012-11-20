@@ -39,18 +39,10 @@ sub store_tags {
 # Right now the file will get entirely recreated.
 sub set_content {
 	my ($post) = @_;
-	my $tag_file = Blarg::config('DIR_POSTS') ."/".Blarg::config('PAGE_TAGS');
-	if(!defined($tag_file)) {
-		print "Error: no tag file specified, will not create tags.\n";
-		return;
-	} elsif(keys $tags == 0) {
-		print "Error: no tags found, $tag_file won't be created.\n";
-		return;
-	}
 
 	# TODO: Customized formatting for headers
 	# Start structuring text.
-	my $content = "## Tags\n";
+	my $content = $post->{content}."\n";
 	# Loop over all the tags.
 	for my $tag_key (sort keys $tags) {
 		$content .= "### [$tag_key](#$tag_key)\n";

@@ -63,8 +63,7 @@ div.meta {
 	padding-right: 5px;
 	width: 20%;
 	float: right;
-	border: dashed;
- 	border-color: rgb(45, 45, 45);
+	border: 1px dashed rgb(45, 45, 45);
 }
 
 body pre {
@@ -109,6 +108,7 @@ code {
   overflow:auto;
   padding:10px;
   margin:10px;
+	margin-right: 20px;
   white-space: pre;
   color: white;
 }

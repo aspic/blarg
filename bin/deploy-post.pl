@@ -28,7 +28,7 @@ if(@ARGV == 0) {
 
 	my $tag_file = Blarg::config('PAGE_TAGS');
 	# Create tags
-	my $tag_post = Blarg::process_post("$tag_file.md");
+	my $tag_post = Blarg::process_post("$tag_file");
 	$tag_post = Blarg::Tags::set_content($tag_post);
 	$blarg->create_file($tag_post);
 
