@@ -1,12 +1,17 @@
+html {
+	background-image: url(/blarg/img/creampaper.png);
+	background-repeat: repeat;
+}
+
 body {
 	width: 900px;
   margin-right: auto;
-  background: #D8D8D8;
 	font-family: arial;
+	box-shadow: 1px 1px 5px 1px rgb(45, 45, 45);
 }
 
 h1 {
-	text-shadow: 3px 3px #D8D8D8;
+	text-shadow: 2px 2px #D8D8D8;
 }
 h1, h2 {
 	margin: 0px;
@@ -64,6 +69,7 @@ div.meta {
 	width: 20%;
 	float: right;
 	border: 1px dashed rgb(45, 45, 45);
+	margin-right: 10px;
 }
 
 body pre {
