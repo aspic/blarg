@@ -64,11 +64,13 @@ sub strip_meta {
 		} elsif($meta_started) {
 			my ($key, $value)= split(/: /, $line);
 
-			# Array
-			if($value =~ m/,/) {
+			# Decompose tags
+			if($key =~ m/tags/) {
 				my @values = split(/,/, $value);
 				$meta->{$key} = \@values;
-			} else {
+			}
+			# Push onto meta hash
+			else {
 				$meta->{$key} = $value;
 			}
 			$count++;
