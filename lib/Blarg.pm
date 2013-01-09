@@ -143,7 +143,8 @@ sub create_file {
 		$meta->{title} = config('TITLE');
 	}
 	if(defined(config('PAGE_TAGS'))) {
-		$meta->{tag} = config('PAGE_TAGS');
+		my $tag_path = file_path(config('PAGE_TAGS'));
+		$meta->{tag} = "$tag_path->{name}.$type";
 	}
 
 	my $template = Template->new({
