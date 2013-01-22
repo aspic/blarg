@@ -1,8 +1,11 @@
 # Simple config file for the blarg
 
-# Dirs
+# Directory structure
 DIR_POSTS = posts
 DIR_DEST = site
 DIR_TPL = templates
+
+# In what file should tags be appended
+PAGE_TAGS = tags.md
 
 URL = someurl
